@@ -15,11 +15,40 @@
  */
 
 import {Component, OnInit} from '@angular/core';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { PreferencesService } from '../preferences.service';
 
 @Component({
   selector: 'tab-preferences',
   templateUrl: './tab-preferences.component.html',
+  styleUrls: ['./tab-preferences.component.css'],
 })
 export class TabPreferencesComponent implements OnInit {
-  ngOnInit(): void {}
+  preferences: PreferencesService;
+  preferencesDebugClient = false;
+  preferencesDebugExtension = false;
+
+  constructor(
+    preferences: PreferencesService,
+  ) {
+    this.preferences = preferences;
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.preferencesDebugClient = await this.preferences.getFlagDebugClient();
+    this.preferencesDebugExtension =
+      await this.preferences.getFlagDebugExtension();
+  }
+
+  async onChangeDebugClient(event: MatSlideToggleChange) {
+    const {checked} = event;
+    this.preferencesDebugClient = checked;
+    await this.preferences.setFlagDebugClient(checked);
+  }
+
+  async onChangeDebugExtension(event: MatSlideToggleChange) {
+    const {checked} = event;
+    this.preferencesDebugExtension = checked;
+    await this.preferences.setFlagDebugExtension(checked);
+  }
 }

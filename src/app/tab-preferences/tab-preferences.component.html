@@ -12,3 +12,11 @@ limitations under the License.
 -->
 
 <h1>Preferences</h1>
+
+<h2>Extension Flags</h2>
+<mat-slide-toggle [checked]="preferencesDebugClient" (change)="onChangeDebugClient($event)">
+  Enable client-side logging
+</mat-slide-toggle>
+<mat-slide-toggle [checked]="preferencesDebugExtension" (change)="onChangeDebugExtension($event)">
+  Enable extension debug logging
+</mat-slide-toggle>
