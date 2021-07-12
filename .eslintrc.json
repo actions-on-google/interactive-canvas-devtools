@@ -1,0 +1,35 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "projects/**/*"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "parserOptions": {
+        "project": [
+          "tsconfig.json"
+        ]
+      },
+      "extends": [
+        "./node_modules/gts"
+      ],
+      "rules": {
+        "@typescript-eslint/triple-slash-reference": "off",
+        "@typescript-eslint/no-explicit-any": "error",
+        "no-constant-condition": "off"
+      }
+    },
+    {
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+      ],
+      "rules": {}
+    }
+  ]
+}

@@ -11,6 +11,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<p>
-  Interactive Canvas Extension
-</p>
+<mat-tab-group animationDuration="0ms" backgroundColor="primary">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>cloud_download</mat-icon>
+      <span>Send Data</span>
+    </ng-template>
+    <tab-update></tab-update>
+  </mat-tab>
+  
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>reviews</mat-icon>
+      <span>TTS Mark</span>
+    </ng-template>
+    <tab-ttsmark></tab-ttsmark>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>history</mat-icon>
+      <span>History</span>
+    </ng-template>
+    <tab-history></tab-history>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>settings</mat-icon>
+      <span>Preferences</span>
+    </ng-template>
+    <tab-preferences></tab-preferences>
+  </mat-tab>
+
+</mat-tab-group>

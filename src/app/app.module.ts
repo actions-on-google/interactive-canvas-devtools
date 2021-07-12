@@ -17,18 +17,40 @@
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
+import {MatButtonModule} from '@angular/material/button';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatTabsModule} from '@angular/material/tabs';
 
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {TabUpdateComponent} from './tab-update/tab-update.component';
+import {TabTtsmarkComponent} from './tab-ttsmark/tab-ttsmark.component';
+import {TabHistoryComponent} from './tab-history/tab-history.component';
+import {TabPreferencesComponent} from './tab-preferences/tab-preferences.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    TabUpdateComponent,
+    TabTtsmarkComponent,
+    TabHistoryComponent,
+    TabPreferencesComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    MatButtonModule,
+    MatChipsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatSlideToggleModule,
+    MatTabsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
