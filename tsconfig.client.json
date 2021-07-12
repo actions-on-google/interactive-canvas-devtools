@@ -1,9 +1,9 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
+/* Typescript options for code that will run in the webpage, not Angular. */
 {
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
+    "outDir": "./dist/client",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,
@@ -14,21 +14,20 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2017",
-    "module": "es2020",
+    "target": "ES2020",
+    "module": "CommonJS",
+    "esModuleInterop": false,
     "lib": [
       "es2018",
       "dom"
     ],
     "types": [
-      "chrome",
-      "node"
+      "chrome"
     ]
   },
-  "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  }
+  "include": [
+    "src/bootstrap.ts",
+    "src/content-script.ts",
+    "src/webpage-script.ts"
+  ]
 }

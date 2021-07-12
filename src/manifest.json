@@ -1,0 +1,22 @@
+{
+    "name": "Interactive Canvas Extension",
+    "description": "Interactive Canvas Extension!",
+    "version": "0.0.0",
+    "manifest_version": 3,
+    "permissions": ["storage", "activeTab", "scripting"],
+    "host_permissions": ["<all_urls>"],
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "exclude_matches": ["*://*.google.com/*"],
+            "run_at": "document_end",
+            "js": ["content-script.js"],
+            "all_frames": true
+        }
+    ],
+    "web_accessible_resources": [{
+        "resources": ["js-yaml.min.js", "webpage-script.js"],
+        "matches": ["<all_urls>"]
+    }],
+    "devtools_page": "bootstrap.html"
+}

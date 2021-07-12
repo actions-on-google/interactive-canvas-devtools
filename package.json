@@ -9,7 +9,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "npm run build:client && npm run build:extension",
+    "build:client": "tsc --project tsconfig.client.json",
+    "build:extension": "ng build",
     "fix": "ng lint --fix",
     "lint": "ng lint",
     "watch": "ng build --watch --configuration development"
@@ -34,6 +36,8 @@
     "@angular-eslint/template-parser": "^12.2.0",
     "@angular/cli": "~12.1.1",
     "@angular/compiler-cli": "~12.1.1",
+    "@types/chrome": "0.0.145",
+    "@types/node": "^12.20.15",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
     "eslint": "^7.30.0",

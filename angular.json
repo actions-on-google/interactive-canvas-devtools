@@ -28,7 +28,14 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/bootstrap.html",
+              "src/manifest.json",
+              {
+                "input": "./dist/client",
+                "glob": "*.js",
+                "output": "."
+              }
             ],
             "styles": [],
             "scripts": []
