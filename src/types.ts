@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
- import {
-  InteractiveCanvasWindow,
-} from './types';
+import {InteractiveCanvas} from './interactive-canvas';
 
-declare let window: InteractiveCanvasWindow;
-
-// https://stackoverflow.com/questions/9602022/chrome-extension-retrieving-global-variable-from-webpage#answer-9636008
-// Code that runs in the context of the real page, without sandboxing.
-window.requestAnimationFrame(() => {
-  const hasInteractiveCanvas = window.interactiveCanvas !== undefined;
-
-  document.dispatchEvent(
-    new MessageEvent('InteractiveCanvas_Init', {
-      data: hasInteractiveCanvas,
-    })
-  );
-});
+/**
+ * An extension of the browser `window` with additional fields pertaining
+ * to this extension.
+ */
+export interface InteractiveCanvasWindow extends Window {
+  interactiveCanvas: InteractiveCanvas;
+  interactiveCanvasExists: boolean;
+}

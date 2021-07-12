@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
- import {
-  InteractiveCanvasWindow,
-} from './types';
+export interface InteractiveCanvas {
+  ready: (callbacks: InteractiveCanvasCallbacks) => void;
+  sendTextQuery: (textQuery: string) => Promise<State>;
+  getHeaderHeightPx: () => Promise<number>;
+  setCanvasState: (state: Object) => Promise<void>;
+  a: {
+    G: InteractiveCanvasCallbacks;
+  };
+}
 
-declare let window: InteractiveCanvasWindow;
+interface InteractiveCanvasCallbacks {
+  onUpdate: (data: Object[]) => Promise<void> | undefined;
+  onTtsMark: (markName: string) => void;
+}
 
-// https://stackoverflow.com/questions/9602022/chrome-extension-retrieving-global-variable-from-webpage#answer-9636008
-// Code that runs in the context of the real page, without sandboxing.
-window.requestAnimationFrame(() => {
-  const hasInteractiveCanvas = window.interactiveCanvas !== undefined;
-
-  document.dispatchEvent(
-    new MessageEvent('InteractiveCanvas_Init', {
-      data: hasInteractiveCanvas,
-    })
-  );
-});
+type State = 'READY' | 'BLOCKED' | 'UNKNOWN';

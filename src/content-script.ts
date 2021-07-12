@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+import {InteractiveCanvasWindow} from './types';
+
+declare let window: InteractiveCanvasWindow;
+
 /**
  * An array of scripts to be loaded into the primary page context.
  */
@@ -25,4 +29,12 @@ scriptsToLoad.forEach(script => {
   s.onload = function () {
     s.remove();
   };
+});
+
+// Event listeners that commuciate with the page without interfering with
+// normal page operations.
+// This runs in a sandbox, with restricted access to novel Window objects.
+document.addEventListener('InteractiveCanvas_Init', (e: Event) => {
+  const event = e as MessageEvent;
+  window.interactiveCanvasExists = event.data;
 });
