@@ -224,4 +224,52 @@ export class ChromeBridgeService {
     }
     this.historySubject.next(history);
   }
+
+  /**
+   * Utility function to add CSS in multiple passes.
+   * @param {string} styleString
+   */
+    private async addStyle(css: string) {
+    chrome.scripting.insertCSS({
+      target: {tabId: this.currentWindow!.id!},
+      css,
+    });
+  }
+  
+  async injectHeaderDom() {
+    if (this.isRemoteTarget)
+      throw new Error('Function unavailable on remote targets');
+
+    await this.addStyle(`
+      .ic-ext-banner {
+        width: 100vw;
+        height: 56px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        background-color: #efefef;
+        border: solid 1px #ccc;
+        z-index: 998;
+      }
+      .ic-ext-icon {
+        width: 48px;
+        height: 48px;
+        background-color: #555;
+        border-radius: 48px;
+        position: fixed;
+        z-index: 999;
+        left: 16px;
+        top: 4px;
+      }
+      .ic-ext-title {
+        position: fixed;
+        z-index: 999;
+        left: 80px;
+        top: 18px;
+        font-family: sans-serif;
+      }
+    `);
+
+    await this.broadcastMessage('Ext-ShowHeader', {});
+  }
 }

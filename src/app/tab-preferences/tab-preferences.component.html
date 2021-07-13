@@ -13,6 +13,20 @@ limitations under the License.
 
 <h1>Preferences</h1>
 
+<!-- Project-level controls -->
+<button id="btn-header" mat-raised-button color="primary" (click)="showHeader()">
+  <mat-icon aria-hidden="true">video_label</mat-icon>
+  <span>Show Header</span>
+</button>
+<br>
+<span id="msg-remote" *ngIf="isRemoteTarget">
+  <!--
+    For remote debugging, these buttons will be disabled. (TODO)
+    Add a helpful message to the developer.
+  -->
+  These features are not available during remote debugging.
+</span>
+
 <h2>Extension Flags</h2>
 <mat-slide-toggle [checked]="preferencesDebugClient" (change)="onChangeDebugClient($event)">
   Enable client-side logging

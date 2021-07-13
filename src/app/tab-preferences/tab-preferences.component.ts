@@ -16,6 +16,7 @@
 
 import {Component, OnInit} from '@angular/core';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {ChromeBridgeService} from '../chrome-bridge.service';
 import {PreferencesService} from '../preferences.service';
 
 @Component({
@@ -27,15 +28,26 @@ export class TabPreferencesComponent implements OnInit {
   preferences: PreferencesService;
   preferencesDebugClient = false;
   preferencesDebugExtension = false;
+  isRemoteTarget = false;
+  chromeBridge: ChromeBridgeService;
 
-  constructor(preferences: PreferencesService) {
+  constructor(
+    preferences: PreferencesService,
+    chromeBridge: ChromeBridgeService
+  ) {
     this.preferences = preferences;
+    this.isRemoteTarget = chromeBridge.isRemoteTarget;
+    this.chromeBridge = chromeBridge;
   }
 
   async ngOnInit(): Promise<void> {
     this.preferencesDebugClient = await this.preferences.getFlagDebugClient();
     this.preferencesDebugExtension =
       await this.preferences.getFlagDebugExtension();
+  }
+
+  showHeader() {
+    this.chromeBridge.injectHeaderDom();
   }
 
   async onChangeDebugClient(event: MatSlideToggleChange) {

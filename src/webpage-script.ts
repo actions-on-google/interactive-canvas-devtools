@@ -18,6 +18,27 @@ import {CanvasHistory, InteractiveCanvasWindow} from './types';
 
 declare let window: InteractiveCanvasWindow;
 
+function showHeader() {
+  const headerTitle = document.getElementsByClassName('ic-ext-title')[0];
+  if (!headerTitle) {
+    // Create banner
+    const banner = document.createElement('div');
+    banner.classList.add('ic-ext-banner');
+
+    const appIcon = document.createElement('div');
+    appIcon.classList.add('ic-ext-icon');
+
+    const appTitle = document.createElement('div');
+    appTitle.classList.add('ic-ext-title');
+    appTitle.innerText = 'My Test App';
+
+    banner.appendChild(appIcon);
+    banner.appendChild(appTitle);
+    // Add to webpage
+    document.body.appendChild(banner);
+  }
+}
+
 // https://stackoverflow.com/questions/9602022/chrome-extension-retrieving-global-variable-from-webpage#answer-9636008
 // Code that runs in the context of the real page, without sandboxing.
 window.requestAnimationFrame(() => {
@@ -70,6 +91,10 @@ document.addEventListener('message', (e: Event) => {
     case 'TtsEndpointEvent': {
       const {name} = eventData;
       window.interactiveCanvas.a.G.onTtsMark(name);
+      break;
+    }
+    case 'Ext-ShowHeader': {
+      showHeader();
       break;
     }
   }
