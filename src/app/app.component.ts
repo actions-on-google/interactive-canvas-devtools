@@ -15,6 +15,9 @@
  */
 
 import {Component} from '@angular/core';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {ChromeBridgeService} from './chrome-bridge.service';
+import {PreferencesService} from './preferences.service';
 
 @Component({
   selector: 'app-root',
@@ -23,5 +26,24 @@ import {Component} from '@angular/core';
 })
 export class AppComponent {
   title = 'interactive-canvas-extension';
-  constructor() {}
+  chromeBridge: ChromeBridgeService;
+  preferences: PreferencesService;
+
+  constructor(
+    chromeBridge: ChromeBridgeService,
+    preferences: PreferencesService
+  ) {
+    this.chromeBridge = chromeBridge;
+    this.preferences = preferences;
+  }
+
+  async tabChanged(event: MatTabChangeEvent) {
+    const {index} = event;
+    const debugExtension = await this.preferences.getFlagDebugExtension();
+    if (debugExtension) {
+      console.log('Open tab', index);
+    }
+    // Re-fetch history, which will re-activate history subject
+    await this.chromeBridge.fetchHistory();
+  }
 }

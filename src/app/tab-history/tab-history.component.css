@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-import {InteractiveCanvas} from './interactive-canvas';
-
-/**
- * A representation of Interactive Canvas events that appear in the History tab
- */
-export interface CanvasHistory {
-  type: 'text' | 'state';
-  timestamp: number;
-  label: string;
+.section-diff div {
+  font-family: monospace;
 }
 
-/**
- * An extension of the browser `window` with additional fields pertaining
- * to this extension.
- */
-export interface InteractiveCanvasWindow extends Window {
-  interactiveCanvas: InteractiveCanvas;
-  interactiveCanvasExists: boolean;
-  interactiveCanvasHistory: CanvasHistory[];
+div.event {
+  margin-bottom: 8px;
+}
+
+div.state {
+  font-family: monospace;
+  cursor: pointer;
+  font-size: x-small;
+}
+
+span.time {
+  opacity: 0.9;
+  font-size: small;
 }

@@ -12,3 +12,23 @@ limitations under the License.
 -->
 
 <h1>History</h1>
+
+<div [hidden]="!showList">
+  <div class="event" *ngFor="let event of sortedHistory; index as i;">
+    <div *ngIf="event.type === 'state'" class="state" (click)="openDiff(i)">
+      {{ event.label }}
+    </div>
+    <div *ngIf="event.type !== 'state'">
+      {{ event.label }}
+    </div>
+    <span class="time">{{ event.relativeTime }}</span>
+  </div>
+</div>
+
+<div class="section-diff" [hidden]="showList">
+  <button mat-raised-button id="btn-history-back" (click)="exitDiff()">
+    <mat-icon aria-hidden="true">arrow_back</mat-icon>
+  </button>
+  <br><br>
+  <div #partDiff></div>
+</div>

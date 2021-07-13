@@ -16,8 +16,10 @@
 
 /// <reference types="chrome"/>
 import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs';
 
-import {InteractiveCanvasWindow} from 'src/types';
+import {CanvasHistory, InteractiveCanvasWindow} from 'src/types';
+import {PreferencesService} from './preferences.service';
 
 declare let window: InteractiveCanvasWindow;
 
@@ -31,9 +33,12 @@ declare let window: InteractiveCanvasWindow;
 export class ChromeBridgeService {
   isRemoteTarget = false;
   currentWindow?: chrome.tabs.Tab;
+  historySubject = new Subject<CanvasHistory[]>();
+  preferences: PreferencesService;
 
-  constructor() {
+  constructor(preferences: PreferencesService) {
     this.init();
+    this.preferences = preferences;
   }
 
   private async init() {
@@ -126,5 +131,20 @@ export class ChromeBridgeService {
       });
     }
     return res;
+  }
+
+  async fetchHistory(): Promise<void> {
+    let history: CanvasHistory[] = [];
+    if (this.isRemoteTarget) {
+      history = await this.execOnRemoteTab('window.interactiveCanvasHistory');
+    } else {
+      history = await this.execOnLocalTab(
+        () => window.interactiveCanvasHistory
+      );
+    }
+    if (await this.preferences.getFlagDebugExtension()) {
+      console.debug('History', history);
+    }
+    this.historySubject.next(history);
   }
 }

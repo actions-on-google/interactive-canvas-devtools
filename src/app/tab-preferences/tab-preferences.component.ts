@@ -15,8 +15,8 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { PreferencesService } from '../preferences.service';
+import {MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {PreferencesService} from '../preferences.service';
 
 @Component({
   selector: 'tab-preferences',
@@ -28,9 +28,7 @@ export class TabPreferencesComponent implements OnInit {
   preferencesDebugClient = false;
   preferencesDebugExtension = false;
 
-  constructor(
-    preferences: PreferencesService,
-  ) {
+  constructor(preferences: PreferencesService) {
     this.preferences = preferences;
   }
 

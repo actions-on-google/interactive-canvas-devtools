@@ -11,7 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-tab-group animationDuration="0ms" backgroundColor="primary">
+<mat-tab-group animationDuration="0ms" backgroundColor="primary" (selectedTabChange)="tabChanged($event)">
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>cloud_download</mat-icon>
@@ -19,7 +19,7 @@ limitations under the License.
     </ng-template>
     <tab-update></tab-update>
   </mat-tab>
-  
+
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>reviews</mat-icon>

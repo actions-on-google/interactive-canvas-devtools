@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
- import {
-  InteractiveCanvasWindow,
-} from './types';
+import {CanvasHistory, InteractiveCanvasWindow} from './types';
 
 declare let window: InteractiveCanvasWindow;
 
@@ -30,4 +28,31 @@ window.requestAnimationFrame(() => {
       data: hasInteractiveCanvas,
     })
   );
+
+  if (!hasInteractiveCanvas) return; // Don't override
+
+  // Implement overrides
+  const webhookHistory: CanvasHistory[] = [];
+  window.interactiveCanvas.sendTextQuery = async text => {
+    webhookHistory.push({label: text, timestamp: Date.now(), type: 'text'});
+    document.dispatchEvent(
+      new MessageEvent('InteractiveCanvas_History', {
+        data: webhookHistory,
+      })
+    );
+    return Promise.resolve('READY');
+  };
+
+  window.interactiveCanvas.setCanvasState = async state => {
+    webhookHistory.push({
+      label: JSON.stringify(state),
+      timestamp: Date.now(),
+      type: 'state',
+    });
+    document.dispatchEvent(
+      new MessageEvent('InteractiveCanvas_History', {
+        data: webhookHistory,
+      })
+    );
+  };
 });

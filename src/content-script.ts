@@ -38,3 +38,8 @@ document.addEventListener('InteractiveCanvas_Init', (e: Event) => {
   const event = e as MessageEvent;
   window.interactiveCanvasExists = event.data;
 });
+
+document.addEventListener('InteractiveCanvas_History', (e: Event) => {
+  const event = e as MessageEvent;
+  window.interactiveCanvasHistory = event.data;
+});
