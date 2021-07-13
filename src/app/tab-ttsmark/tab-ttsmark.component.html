@@ -12,3 +12,22 @@ limitations under the License.
 -->
 
 <h1>onTtsMark</h1>
+
+<mat-form-field appearance="fill">
+  <mat-label>Enter TTS Mark</mat-label>
+  <textarea matInput [(ngModel)]="markInput">
+  </textarea>
+</mat-form-field>
+
+<br>
+
+<button id="btn-import" mat-raised-button color="primary" (click)="run()">
+  <mat-icon aria-hidden="true">launch</mat-icon>
+  <span>Run</span>
+</button>
+
+<mat-chip-list>
+  <mat-chip class="example" mat-raised-button *ngFor="let example of marks" (click)="prepopulate(example)">
+    {{ example }}
+  </mat-chip>
+</mat-chip-list>

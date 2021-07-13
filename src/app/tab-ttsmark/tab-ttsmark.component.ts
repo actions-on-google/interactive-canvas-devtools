@@ -15,11 +15,33 @@
  */
 
 import {Component, OnInit} from '@angular/core';
+import {ChromeBridgeService} from '../chrome-bridge.service';
 
 @Component({
   selector: 'tab-ttsmark',
   templateUrl: './tab-ttsmark.component.html',
+  styleUrls: ['./tab-ttsmark.component.css'],
 })
 export class TabTtsmarkComponent implements OnInit {
-  ngOnInit(): void {}
+  markInput?: string;
+  marks: string[] = ['START', 'END'];
+  chromeBridge: ChromeBridgeService;
+
+  constructor(chromeBridge: ChromeBridgeService) {
+    this.chromeBridge = chromeBridge;
+  }
+
+  ngOnInit(): void {
+    this.chromeBridge.marksSubject.subscribe((marks: string[]) => {
+      this.marks = marks;
+    });
+  }
+
+  prepopulate(mark: string) {
+    this.markInput = mark;
+  }
+
+  run() {
+    this.chromeBridge.sendOnTtsMark(this.markInput || '');
+  }
 }

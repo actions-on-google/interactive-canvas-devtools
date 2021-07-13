@@ -56,3 +56,21 @@ window.requestAnimationFrame(() => {
     );
   };
 });
+
+document.addEventListener('message', (e: Event) => {
+  const event = e as MessageEvent;
+  const eventData = event.data;
+  const {type} = eventData;
+  switch (type) {
+    case 'payload': {
+      const {data} = eventData;
+      window.interactiveCanvas.a.G.onUpdate(data);
+      break;
+    }
+    case 'TtsEndpointEvent': {
+      const {name} = eventData;
+      window.interactiveCanvas.a.G.onTtsMark(name);
+      break;
+    }
+  }
+});

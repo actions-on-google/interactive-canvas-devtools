@@ -16,6 +16,7 @@
 
 /// <reference types="chrome"/>
 import {Injectable} from '@angular/core';
+import {v4 as uuidv4} from 'uuid';
 import {Subject} from 'rxjs';
 
 import {CanvasHistory, InteractiveCanvasWindow} from 'src/types';
@@ -33,6 +34,10 @@ declare let window: InteractiveCanvasWindow;
 export class ChromeBridgeService {
   isRemoteTarget = false;
   currentWindow?: chrome.tabs.Tab;
+  private payloadsSet = new Set<string>();
+  payloadSubject = new Subject<string[]>();
+  private marksSet = new Set<string>();
+  marksSubject = new Subject<string[]>();
   historySubject = new Subject<CanvasHistory[]>();
   preferences: PreferencesService;
 
@@ -54,6 +59,16 @@ export class ChromeBridgeService {
       });
       this.currentWindow = activeTabs[0];
       this.isRemoteTarget = true;
+      // Inject
+      await this.execOnRemoteTab(`
+        window.interactiveCanvasHistory = []
+        window.interactiveCanvas.sendTextQuery = (text) => {
+          window.interactiveCanvasHistory.push({title: text, time: Date.now()})
+        }
+        window.interactiveCanvas.setCanvasState = (state) => {
+          window.interactiveCanvasHistory.push({title: JSON.stringify(state), time: Date.now()})
+        }
+      `);
     }
   }
 
@@ -116,6 +131,36 @@ export class ChromeBridgeService {
    * Checks if the connected webpage has Interactive Canvas.
    * @returns True if interactiveCanvas exists on the page
    */
+  private async broadcastMessage(type: string, data: object | string) {
+    const requestId = uuidv4();
+    // https://stackoverflow.com/questions/17567624/pass-a-parameter-to-a-content-script-injected-using-chrome-tabs-executescript
+    chrome.storage.local.set({
+      data,
+      debugClient: await this.preferences.getFlagDebugClient(),
+      requestId,
+      type,
+    });
+    await this.execOnLocalTab(() => {
+      chrome.storage.local.get(
+        ['data', 'debugClient', 'requestId', 'type'],
+        (keys: Record<string, object | string>) => {
+          const {data, debugClient, requestId, type} = keys;
+          const msgData = {
+            data: {
+              type,
+              requestId,
+              data,
+            },
+          };
+          if (debugClient) {
+            console.debug('Dispatching', msgData);
+          }
+          document.dispatchEvent(new MessageEvent('message', msgData));
+        }
+      );
+    });
+  }
+
   async hasInteractiveCanvas() {
     // Cannot access modified elements on `window`
     // Get the window.interactiveCanvasExists from `content_script.js`
@@ -131,6 +176,38 @@ export class ChromeBridgeService {
       });
     }
     return res;
+  }
+
+  async sendOnUpdate(object: string) {
+    // Update history
+    this.payloadsSet.add(object);
+    this.payloadSubject.next([...this.payloadsSet]);
+
+    // Dispatch
+    if (this.isRemoteTarget) {
+      // Send unparsed text
+      await this.execOnRemoteTab(
+        `window.interactiveCanvas.a.m.onUpdate([${object}])`
+      );
+    } else {
+      await this.broadcastMessage('payload', [JSON.parse(object)]);
+    }
+  }
+
+  async sendOnTtsMark(mark: string) {
+    // Update history
+    this.marksSet.add(mark);
+    this.marksSubject.next([...this.marksSet]);
+
+    // Dispatch
+    if (this.isRemoteTarget) {
+      // Send unparsed text
+      await this.execOnRemoteTab(
+        `window.interactiveCanvas.a.m.onTtsMark([${mark}])`
+      );
+    } else {
+      await this.broadcastMessage('TtsEndpointEvent', mark);
+    }
   }
 
   async fetchHistory(): Promise<void> {

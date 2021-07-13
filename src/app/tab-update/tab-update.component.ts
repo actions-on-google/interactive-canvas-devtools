@@ -15,11 +15,35 @@
  */
 
 import {Component, OnInit} from '@angular/core';
+import jsonRepair from '../../utils/json-repair';
+import {ChromeBridgeService} from '../chrome-bridge.service';
 
 @Component({
   selector: 'tab-update',
   templateUrl: './tab-update.component.html',
+  styleUrls: ['./tab-update.component.css'],
 })
 export class TabUpdateComponent implements OnInit {
-  ngOnInit(): void {}
+  updateInput?: string;
+  payloads: string[] = [];
+  chromeBridge: ChromeBridgeService;
+
+  constructor(chromeBridge: ChromeBridgeService) {
+    this.chromeBridge = chromeBridge;
+  }
+
+  ngOnInit(): void {
+    this.chromeBridge.payloadSubject.subscribe((payloads: string[]) => {
+      this.payloads = payloads;
+    });
+  }
+
+  prepopulate(payload: string) {
+    this.updateInput = payload;
+  }
+
+  run() {
+    const json = jsonRepair(this.updateInput || '{}');
+    this.chromeBridge.sendOnUpdate(json);
+  }
 }
