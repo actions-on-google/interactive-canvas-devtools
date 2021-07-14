@@ -21,7 +21,7 @@ declare let window: InteractiveCanvasWindow;
 /**
  * An array of scripts to be loaded into the primary page context.
  */
-const scriptsToLoad = ['webpage-script.js'];
+const scriptsToLoad = ['js-yaml.min.js', 'webpage-script.js'];
 scriptsToLoad.forEach(script => {
   const s = document.createElement('script');
   s.src = chrome.runtime.getURL(script);
@@ -42,4 +42,11 @@ document.addEventListener('InteractiveCanvas_Init', (e: Event) => {
 document.addEventListener('InteractiveCanvas_History', (e: Event) => {
   const event = e as MessageEvent;
   window.interactiveCanvasHistory = event.data;
+});
+
+document.addEventListener('InteractiveCanvas_ProcessSdk', (e: Event) => {
+  const event = e as MessageEvent;
+  const {data, ready} = event.data;
+  window.interactiveCanvasData = data;
+  window.interactiveCanvasReady = ready;
 });

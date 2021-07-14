@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// <reference path="../../node_modules/@types/chrome/index.d.ts"/>
+/// <reference path="../../node_modules/@types/chrome/index.d.ts"/>
 import {Injectable} from '@angular/core';
 
 /**

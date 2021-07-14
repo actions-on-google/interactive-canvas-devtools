@@ -18,6 +18,11 @@ limitations under the License.
   <mat-icon aria-hidden="true">video_label</mat-icon>
   <span>Show Header</span>
 </button>
+
+<button id="btn-import" mat-raised-button color="primary" (click)="loadSdk()">
+  <mat-icon aria-hidden="true">folder_special</mat-icon>
+  <span>Import /sdk</span>
+</button>
 <br>
 <span id="msg-remote" *ngIf="isRemoteTarget">
   <!--

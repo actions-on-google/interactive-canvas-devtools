@@ -32,6 +32,11 @@
               "src/bootstrap.html",
               "src/manifest.json",
               {
+                "input": "./node_modules/js-yaml/dist/",
+                "glob": "js-yaml.min.js",
+                "output": "."
+              },
+              {
                 "input": "./dist/client",
                 "glob": "*.js",
                 "output": "."

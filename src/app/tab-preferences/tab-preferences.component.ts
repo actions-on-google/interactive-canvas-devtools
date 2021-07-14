@@ -50,6 +50,10 @@ export class TabPreferencesComponent implements OnInit {
     this.chromeBridge.injectHeaderDom();
   }
 
+  loadSdk() {
+    this.chromeBridge.loadSdk();
+  }
+
   async onChangeDebugClient(event: MatSlideToggleChange) {
     const {checked} = event;
     this.preferencesDebugClient = checked;

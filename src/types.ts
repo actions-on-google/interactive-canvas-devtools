@@ -25,6 +25,32 @@ export interface CanvasHistory {
   label: string;
 }
 
+export interface DirectoryHandler {
+  entries: () => FileIterator;
+  getDirectoryHandle: (path: string) => Promise<DirectoryHandler>;
+  getFileHandle: (path: string) => Promise<FileHandler>;
+}
+
+export interface FileIterator {
+  next: () => {
+    done: boolean;
+    value?: [string, FileHandler];
+  };
+}
+
+export interface FileHandler {
+  getFile: () => Promise<File>;
+}
+
+export interface File {
+  slice: () => Promise<Blob>;
+  text: () => Promise<string>;
+}
+
+export interface JSYaml {
+  load: (fileData: string, encoding: 'utf-8') => object;
+}
+
 /**
  * An extension of the browser `window` with additional fields pertaining
  * to this extension.
@@ -33,4 +59,26 @@ export interface InteractiveCanvasWindow extends Window {
   interactiveCanvas: InteractiveCanvas;
   interactiveCanvasExists: boolean;
   interactiveCanvasHistory: CanvasHistory[];
+  interactiveCanvasData: {
+    data: string[];
+    marks: string[];
+  };
+  interactiveCanvasReady: boolean;
+  interactiveCanvasProcessSdk: (mockWindow?: InteractiveCanvasWindow) => void;
+  interactiveCanvasHeader: {
+    title: string;
+    projectId: string;
+    /**
+     * base64 representation of the project's logo
+     */
+    logoSrcData: string;
+  };
+  /**
+   * JSYaml is a 3P library that converts YAML to JSON
+   */
+  jsyaml: JSYaml;
+  /**
+   * A browser operation that opens a file directory selector
+   */
+  showDirectoryPicker: () => Promise<DirectoryHandler>;
 }

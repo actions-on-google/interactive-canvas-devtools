@@ -21,6 +21,7 @@ import {Subject} from 'rxjs';
 
 import {CanvasHistory, InteractiveCanvasWindow} from 'src/types';
 import {PreferencesService} from './preferences.service';
+import jsonRepair from 'src/utils/json-repair';
 
 declare let window: InteractiveCanvasWindow;
 
@@ -128,8 +129,10 @@ export class ChromeBridgeService {
   }
 
   /**
-   * Checks if the connected webpage has Interactive Canvas.
-   * @returns True if interactiveCanvas exists on the page
+   * Sends a MessageEvent to the webpage, where it may be processed by behavior
+   * on the page directly or through a listener in `webpage-script`.
+   * @param type String message type
+   * @param data Data to be sent along with the message, dependent on message type
    */
   private async broadcastMessage(type: string, data: object | string) {
     const requestId = uuidv4();
@@ -161,6 +164,10 @@ export class ChromeBridgeService {
     });
   }
 
+  /**
+   * Checks if the connected webpage has Interactive Canvas.
+   * @returns True if interactiveCanvas exists on the page
+   */
   async hasInteractiveCanvas() {
     // Cannot access modified elements on `window`
     // Get the window.interactiveCanvasExists from `content_script.js`
@@ -178,6 +185,11 @@ export class ChromeBridgeService {
     return res;
   }
 
+  /**
+   * Triggers an `onUpdate` callback in Interactive Canvas.
+   * @see https://developers.google.com/assistant/interactivecanvas/reference#onupdate
+   * @param object JSON string to send to the webpage
+   */
   async sendOnUpdate(object: string) {
     // Update history
     this.payloadsSet.add(object);
@@ -194,6 +206,11 @@ export class ChromeBridgeService {
     }
   }
 
+  /**
+   * Triggers an `onTtsMark` callback in Interactive Canvas.
+   * @see https://developers.google.com/assistant/interactivecanvas/reference#onttsmark
+   * @param mark Mark to send to the webpage
+   */
   async sendOnTtsMark(mark: string) {
     // Update history
     this.marksSet.add(mark);
@@ -210,6 +227,9 @@ export class ChromeBridgeService {
     }
   }
 
+  /**
+   * Obtains history of Interactive Canvas events from `content-script`.
+   */
   async fetchHistory(): Promise<void> {
     let history: CanvasHistory[] = [];
     if (this.isRemoteTarget) {
@@ -226,16 +246,22 @@ export class ChromeBridgeService {
   }
 
   /**
-   * Utility function to add CSS in multiple passes.
-   * @param {string} styleString
+   * Utility function to add CSS to the webpage.
+   * @see https://developer.chrome.com/docs/extensions/reference/scripting/#method-insertCSS
+   * @param css Styles to add to the webpage
    */
-    private async addStyle(css: string) {
+  private async addStyle(css: string) {
     chrome.scripting.insertCSS({
       target: {tabId: this.currentWindow!.id!},
       css,
     });
   }
-  
+
+  /**
+   * Inserts HTML elements in the webpage to emulate a header that would
+   * appear in an Interactive Canvas app on-device. It is optionally called
+   * in the Preferences tab.
+   */
   async injectHeaderDom() {
     if (this.isRemoteTarget)
       throw new Error('Function unavailable on remote targets');
@@ -271,5 +297,57 @@ export class ChromeBridgeService {
     `);
 
     await this.broadcastMessage('Ext-ShowHeader', {});
+  }
+
+  /**
+   * Sends a command to the webpage to open a directory picker so the developer
+   * can select their project's SDK folder and then receive suggested TTS marks,
+   * JSON payloads, and more accurate header (see `injectHeaderDom`).
+   *
+   * This is a long-term event, so the extension cannot directly grab results
+   * from the execution. It needs to know when the execution has ended.
+   * As such, this function will periodically (every 500ms) check for a value
+   * on the page called `interactiveCanvasReady` and use that as a signal
+   * to know the processing is complete.
+   *
+   * Once complete, data that was processed in the webpage context will be
+   * obtained and added to the extension.
+   */
+  async loadSdk() {
+    if (this.isRemoteTarget)
+      throw new Error('Function unavailable on remote targets');
+
+    await this.broadcastMessage('Ext-ProcessSdk', {});
+
+    // Block until previous op is done
+    let ready = false;
+    const interval = setInterval(async () => {
+      // Exfiltrate filedata parse
+      ready = await this.execOnLocalTab<boolean>(
+        () => window.interactiveCanvasReady
+      );
+      if (ready) {
+        clearInterval(interval);
+
+        const parsedDataPayloads = await this.execOnLocalTab(
+          () => window.interactiveCanvasData
+        );
+
+        if (await this.preferences.getFlagDebugExtension()) {
+          console.debug('Process SDK Received', parsedDataPayloads);
+        }
+
+        for (const payload of parsedDataPayloads.data) {
+          const payloadJson = jsonRepair(payload);
+          this.payloadsSet.add(payloadJson);
+        }
+        this.payloadSubject.next([...this.payloadsSet]);
+
+        for (const mark of parsedDataPayloads.marks) {
+          this.marksSet.add(mark);
+        }
+        this.marksSubject.next([...this.marksSet]);
+      }
+    }, 500);
   }
 }
