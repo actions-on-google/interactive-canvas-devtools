@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+#btn-header mat-icon {
+  transform: rotate(180deg);
+}
+
 mat-slide-toggle {
   display: block; /* Force new line */
 }

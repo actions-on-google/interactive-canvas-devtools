@@ -1,0 +1,71 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: var(--primary-text-color);
+}
+
+span.diff-neutral {
+  color: var(--primary-text-color);
+}
+
+span.diff-added {
+  color: var(--added-text-color);
+}
+
+span.diff-removed {
+  color: var(--removed-text-color);
+}
+
+button {
+  text-transform: uppercase;
+  margin-right: 8px !important;
+}
+
+.mat-tab-body-wrapper {
+  height: 100vh;
+  padding-left: 8px;
+  overflow-y: auto;
+}
+
+h1 {
+  padding-top: 8px;
+}
+
+.mat-form-field {
+  width: calc(100vw - 54px);
+}
+
+/**
+ * Light/Dark theme differences
+ * Change variables in each mode to affect styles throughout extension.
+ */
+@media (prefers-color-scheme: light) {
+  body {
+    --primary-text-color: #000000;
+    --added-text-color: #388E3C;
+    --removed-text-color: #D32F2F;
+    --primary-background-color: #EEEEEE;
+    --button-background-color: #263238;
+    --button-text-color: #999;
+    --toggle-background-color: rgba(176,190,197,.54);
+    --toggle-thumb-color: #b0bec5;
+    --label-unselected-text-color: rgba(0, 0, 0, 0.7);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    --primary-text-color: #EFEFEF;
+    --added-text-color: #81C784;
+    --removed-text-color: #E57373;
+    --primary-background-color: #212121;
+    --button-background-color: #CFD8DC;
+    --button-text-color: #212121;
+    --toggle-background-color: rgba(96,125,139,.54);
+    --toggle-thumb-color: rgb(96, 125, 139); /* #607D8B */
+    --label-unselected-text-color: rgba(255, 255, 255, 0.7);
+  }
+}
