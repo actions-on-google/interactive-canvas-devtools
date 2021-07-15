@@ -19,6 +19,11 @@ import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {ChromeBridgeService} from '../chrome-bridge.service';
 import {PreferencesService} from '../preferences.service';
 
+/**
+ * The Preferences tab displays available session-level capablities. It also
+ * presents a number of extension settings to provide more developer control
+ * over the debugging.
+ */
 @Component({
   selector: 'tab-preferences',
   templateUrl: './tab-preferences.component.html',
@@ -46,20 +51,34 @@ export class TabPreferencesComponent implements OnInit {
       await this.preferences.getFlagDebugExtension();
   }
 
+  /**
+   * Click handler to show header on the webpage.
+   */
   showHeader() {
     this.chromeBridge.injectHeaderDom();
   }
 
+  /**
+   * Click handler to prompt the user for the project SDK folder.
+   */
   loadSdk() {
     this.chromeBridge.loadSdk();
   }
 
+  /**
+   * Click handler when the Debug Client toggle is changed.
+   * @param event Toggle event
+   */
   async onChangeDebugClient(event: MatSlideToggleChange) {
     const {checked} = event;
     this.preferencesDebugClient = checked;
     await this.preferences.setFlagDebugClient(checked);
   }
 
+  /**
+   * Click handler when the Debug Extension toggle is changed.
+   * @param event Toggle event
+   */
   async onChangeDebugExtension(event: MatSlideToggleChange) {
     const {checked} = event;
     this.preferencesDebugExtension = checked;

@@ -25,12 +25,18 @@ export interface CanvasHistory {
   label: string;
 }
 
+/**
+ * @see https://wicg.github.io/file-system-access/#api-filesystemdirectoryhandle-getdirectoryhandle
+ */
 export interface DirectoryHandler {
   entries: () => FileIterator;
   getDirectoryHandle: (path: string) => Promise<DirectoryHandler>;
   getFileHandle: (path: string) => Promise<FileHandler>;
 }
 
+/**
+ * @see https://wicg.github.io/file-system-access/#api-filesystemdirectoryhandle-asynciterable
+ */
 export interface FileIterator {
   next: () => {
     done: boolean;
@@ -38,10 +44,16 @@ export interface FileIterator {
   };
 }
 
+/**
+ * @see https://wicg.github.io/file-system-access/#api-filesystemdirectoryhandle-getfilehandle
+ */
 export interface FileHandler {
   getFile: () => Promise<File>;
 }
 
+/**
+ * @see https://wicg.github.io/file-system-access/#api-filesystemfilehandle-getfile
+ */
 export interface File {
   slice: () => Promise<Blob>;
   text: () => Promise<string>;
@@ -69,16 +81,18 @@ export interface InteractiveCanvasWindow extends Window {
     title: string;
     projectId: string;
     /**
-     * base64 representation of the project's logo
+     * base64 representation of the project's logo.
      */
     logoSrcData: string;
   };
   /**
-   * JSYaml is a 3P library that converts YAML to JSON
+   * JSYaml is a 3P library that converts YAML to JSON.
+   * @see https://www.npmjs.com/package/js-yaml
    */
   jsyaml: JSYaml;
   /**
-   * A browser operation that opens a file directory selector
+   * A browser operation that opens a file directory selector.
+   * @see https://web.dev/file-system-access/
    */
   showDirectoryPicker: () => Promise<DirectoryHandler>;
 }

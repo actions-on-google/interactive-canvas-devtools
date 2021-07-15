@@ -36,6 +36,12 @@ interface SortedCanvasHistory extends CanvasHistory {
   relativeTime: string;
 }
 
+/**
+ * The History tab displays a record of outbound Interactive Canvas
+ * events and displays them in chronological order starting from the
+ * most-recent. Canvas state changes will show more precise line-by-line
+ * diffs in greater detail.
+ */
 @Component({
   selector: 'tab-history',
   templateUrl: './tab-history.component.html',
@@ -63,6 +69,11 @@ export class TabHistoryComponent implements OnInit {
     });
   }
 
+  /**
+   * Switches the tab view to a colored diff between the currently selected
+   * state event and the previous state event.
+   * @param index Current index in the sortedHistory array, which is chronological
+   */
   openDiff(index: number): void {
     // Add listener for diff
     const entryCurrent = this.sortedHistory[index];
@@ -104,6 +115,9 @@ export class TabHistoryComponent implements OnInit {
     this.showList = false;
   }
 
+  /**
+   * Exits the diff view and returns the view to the full list of events.
+   */
   exitDiff() {
     this.showList = true;
   }

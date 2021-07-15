@@ -18,6 +18,10 @@ import {Component, OnInit} from '@angular/core';
 import jsonRepair from '../../utils/json-repair';
 import {ChromeBridgeService} from '../chrome-bridge.service';
 
+/**
+ * The Update tab allows one to send JSON data to the client. Suggestion
+ * chips appear below the input prompt to fill in the prompt.
+ */
 @Component({
   selector: 'tab-update',
   templateUrl: './tab-update.component.html',
@@ -38,10 +42,18 @@ export class TabUpdateComponent implements OnInit {
     });
   }
 
+  /**
+   * Click handler for suggestion chips, which will update the value of
+   * the input field.
+   * @param payload Stringified JSON being selected
+   */
   prepopulate(payload: string) {
     this.updateInput = payload;
   }
 
+  /**
+   * Sends a properly formatted JSON string to the client.
+   */
   run() {
     const json = jsonRepair(this.updateInput || '{}');
     this.chromeBridge.sendOnUpdate(json);

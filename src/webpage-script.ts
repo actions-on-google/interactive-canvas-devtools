@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * @fileoverview Code that runs in the context of the real page, without sandboxing.
+ * @see https://stackoverflow.com/questions/9602022/chrome-extension-retrieving-global-variable-from-webpage#answer-9636008
+ */
+
 import {
   CanvasHistory,
   DirectoryHandler,
@@ -24,6 +29,9 @@ import {
 
 declare let window: InteractiveCanvasWindow;
 
+/**
+ * Callback used when iterating through an SDK directory.
+ */
 type DirectoryIteratorCallback = (
   filename: string,
   handler: FileHandler
@@ -402,8 +410,6 @@ async function getImgData(blob: Blob): Promise<string> {
   });
 }
 
-// https://stackoverflow.com/questions/9602022/chrome-extension-retrieving-global-variable-from-webpage#answer-9636008
-// Code that runs in the context of the real page, without sandboxing.
 window.requestAnimationFrame(() => {
   const hasInteractiveCanvas = window.interactiveCanvas !== undefined;
 

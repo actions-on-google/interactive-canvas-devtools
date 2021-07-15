@@ -17,6 +17,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ChromeBridgeService} from '../chrome-bridge.service';
 
+/**
+ * The TTS Mark tab allows one to send a custom TTS mark to the client.
+ * Suggestion chips appear below the input prompt to fill in the prompt.
+ */
 @Component({
   selector: 'tab-ttsmark',
   templateUrl: './tab-ttsmark.component.html',
@@ -37,10 +41,18 @@ export class TabTtsmarkComponent implements OnInit {
     });
   }
 
+  /**
+   * Click handler for suggestion chips, which will update the value of
+   * the input field.
+   * @param mark TTS Mark being selected
+   */
   prepopulate(mark: string) {
     this.markInput = mark;
   }
 
+  /**
+   * Sends a TTS Mark to the client.
+   */
   run() {
     this.chromeBridge.sendOnTtsMark(this.markInput || '');
   }

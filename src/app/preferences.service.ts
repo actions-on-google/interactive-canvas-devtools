@@ -19,7 +19,6 @@ import {Injectable} from '@angular/core';
 
 /**
  * Every setting should have getters/setters that work with Chrome storage API.
- * See https://developer.chrome.com/docs/extensions/reference/storage/
  */
 interface ExtensionPreferences {
   /**
@@ -34,6 +33,12 @@ interface ExtensionPreferences {
 
 type ExtensionPreference = keyof ExtensionPreferences;
 
+/**
+ * The Preferences service manages extension-wide preferences in a persistent
+ * manner. It synchronizes changes with the browser preferences so that
+ * they persist between sessions and between browser instances.
+ * @see https://developer.chrome.com/docs/extensions/reference/storage/
+ */
 @Injectable({
   providedIn: 'root',
 })

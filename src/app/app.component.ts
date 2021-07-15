@@ -19,6 +19,9 @@ import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ChromeBridgeService} from './chrome-bridge.service';
 import {PreferencesService} from './preferences.service';
 
+/**
+ * Primary component that encompasses the Chrome Extension.
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -37,6 +40,12 @@ export class AppComponent {
     this.preferences = preferences;
   }
 
+  /**
+   * Event that executes when the selected tab changes. This can be used to
+   * pull or push data between the extension and client. Currently it will
+   * re-fetch the Interactive Canvas app history.
+   * @param event Generated event on each tab change
+   */
   async tabChanged(event: MatTabChangeEvent) {
     const {index} = event;
     const debugExtension = await this.preferences.getFlagDebugExtension();
