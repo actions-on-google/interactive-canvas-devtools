@@ -32,7 +32,7 @@ export interface InteractiveCanvas {
  * Types for Interactive Canvas callbacks.
  * @see https://developers.google.com/assistant/interactivecanvas/reference#interactivecanvascallbacks
  */
-interface InteractiveCanvasCallbacks {
+export interface InteractiveCanvasCallbacks {
   onUpdate: (data: Object[]) => Promise<void> | undefined;
   onTtsMark: (markName: string) => void;
 }

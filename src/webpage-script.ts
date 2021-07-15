@@ -490,6 +490,36 @@ function addUnsupportedApiWarnings() {
   addPropertyWarning('webkitSpeechRecognition', window);
 }
 
+/**
+ * Add methods as `window.interactiveCanvasDebug` to trigger callbacks
+ * programmatically from the DevTools console.
+ */
+function addDebuggingMethodsInJsConsole() {
+  window.interactiveCanvasDebug = {
+    onUpdate: (data: Object[]) => {
+      const msgData = {
+        data: {
+          type: 'payload',
+          requestId: 'requestId',
+          data,
+        },
+      };
+      document.dispatchEvent(new MessageEvent('message', msgData));
+      return undefined;
+    },
+    onTtsMark: (markName: string) => {
+      const msgData = {
+        data: {
+          type: 'payload',
+          requestId: 'requestId',
+          data: markName,
+        },
+      };
+      document.dispatchEvent(new MessageEvent('message', msgData));
+    },
+  };
+}
+
 window.requestAnimationFrame(() => {
   const hasInteractiveCanvas = window.interactiveCanvas !== undefined;
 
@@ -528,6 +558,7 @@ window.requestAnimationFrame(() => {
 
   window.interactiveCanvasProcessSdk = processSdk;
   addUnsupportedApiWarnings();
+  addDebuggingMethodsInJsConsole();
 });
 
 document.addEventListener('message', (e: Event) => {

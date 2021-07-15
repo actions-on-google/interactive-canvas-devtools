@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import {InteractiveCanvas} from './interactive-canvas';
+import {
+  InteractiveCanvas,
+  InteractiveCanvasCallbacks,
+} from './interactive-canvas';
 
 /**
  * A representation of Interactive Canvas events that appear in the History tab
@@ -85,6 +88,7 @@ export interface InteractiveCanvasWindow extends Window {
      */
     logoSrcData: string;
   };
+  interactiveCanvasDebug: InteractiveCanvasCallbacks;
   /**
    * JSYaml is a 3P library that converts YAML to JSON.
    * @see https://www.npmjs.com/package/js-yaml
