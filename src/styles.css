@@ -68,4 +68,8 @@ h1 {
     --toggle-thumb-color: rgb(96, 125, 139); /* #607D8B */
     --label-unselected-text-color: rgba(255, 255, 255, 0.7);
   }
+
+  a:visited {
+    color: cyan;
+  }
 }

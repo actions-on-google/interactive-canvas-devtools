@@ -71,6 +71,10 @@ export class ChromeBridgeService {
         }
       `);
     }
+    // Sync API behavior with webpage.
+    await this.updateUnsupportedApiBehavior(
+      await this.preferences.getUnsupportedApiBehavior()
+    );
   }
 
   /**
@@ -349,5 +353,14 @@ export class ChromeBridgeService {
         this.marksSubject.next([...this.marksSet]);
       }
     }, 500);
+  }
+
+  /**
+   * Method that is called by `tab-preferences` when the `unsupportedApiBehavior`
+   * value is changed, in order to broadcast this change with the webpage.
+   * @param newValue The updated warning level
+   */
+  async updateUnsupportedApiBehavior(newValue = 'off') {
+    await this.broadcastMessage('Ext-UnsupportedApiBehavior', newValue);
   }
 }

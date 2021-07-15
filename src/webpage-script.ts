@@ -410,6 +410,86 @@ async function getImgData(blob: Blob): Promise<string> {
   });
 }
 
+/**
+ * A setting for how to behave when an unsupported API is used. Updated via
+ * `Ext-UnsupportedApiBehavior` message. It is a preference (see `preferences.service`)
+ * and updated in the Preferences tab.
+ */
+let unsupportedApiBehavior = 'off';
+
+/**
+ * Returns the names of every property of an object that is a function.
+ * @param object An object with methods and optionally fields
+ */
+function getMethodsOfObject(object: Record<string, Function>) {
+  const properties = Object.getOwnPropertyNames(object);
+  return properties.filter(p => typeof object[p] === 'function');
+}
+
+/**
+ * Adds an Interactive Canvas warning to the specific method.
+ * @param fn Function that should have additional warning
+ * @param binder The object to which this function belongs
+ */
+// eslint-disable-next-line
+function addMethodWarning(fn: (...args: any[]) => unknown, binder: Record<string, Function>) {
+  const boundFunction = fn.bind(binder);
+  const methodName = fn.name;
+  const msg =
+    `The method "${methodName}" will not execute in an Interactive ` +
+    'Canvas environment. See ' +
+    'https://developers.google.com/assistant/interactivecanvas/web-apps#guidelines_and_restrictions ' +
+    'to learn more.';
+  binder[methodName] = (...args: unknown[]) => {
+    if (unsupportedApiBehavior === 'warn') {
+      console.warn(msg);
+    } else if (unsupportedApiBehavior === 'error') {
+      throw new Error(msg);
+    }
+    boundFunction(...args);
+  };
+}
+
+/**
+ * Adds an Interactive Canvas warning to the specific property.
+ * @param readOnlyField String-based name of the property
+ * @param owner The object to which the field belongs
+ */
+// eslint-disable-next-line
+function addPropertyWarning(readOnlyField: string, owner: any) {
+  const msg =
+    `The field "${readOnlyField}" will not execute in an Interactive ` +
+    'Canvas environment. See ' +
+    'https://developers.google.com/assistant/interactivecanvas/web-apps#guidelines_and_restrictions ' +
+    'to learn more.';
+  const boundProperty = owner[readOnlyField];
+  Object.defineProperty(owner, readOnlyField, {
+    get: () => {
+      if (unsupportedApiBehavior === 'warn') {
+        console.warn(msg);
+      } else if (unsupportedApiBehavior === 'error') {
+        throw new Error(msg);
+      }
+      return boundProperty;
+    },
+  });
+}
+
+/**
+ * Add handler to every API method that will not work in Interactive Canvas.
+ * This will result in either a warning or throw an error depending on
+ * preference.
+ * @see https://developers.google.com/assistant/interactivecanvas/web-apps#guidelines_and_restrictions
+ */
+function addUnsupportedApiWarnings() {
+  addPropertyWarning('localStorage', window);
+  addPropertyWarning('geolocation', window.navigator);
+  addPropertyWarning('mediaDevices', window.navigator);
+  addPropertyWarning('cookie', document);
+  addPropertyWarning('indexedDB', window);
+  addPropertyWarning('webkitSpeechRecognition', window);
+}
+
 window.requestAnimationFrame(() => {
   const hasInteractiveCanvas = window.interactiveCanvas !== undefined;
 
@@ -447,6 +527,7 @@ window.requestAnimationFrame(() => {
   };
 
   window.interactiveCanvasProcessSdk = processSdk;
+  addUnsupportedApiWarnings();
 });
 
 document.addEventListener('message', (e: Event) => {
@@ -471,6 +552,10 @@ document.addEventListener('message', (e: Event) => {
     case 'Ext-ProcessSdk': {
       window.interactiveCanvasProcessSdk();
       break;
+    }
+    case 'Ext-UnsupportedApiBehavior': {
+      const {data} = eventData;
+      unsupportedApiBehavior = data;
     }
   }
 });

@@ -16,6 +16,7 @@
 
 import {Component, OnInit} from '@angular/core';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {MatRadioChange} from '@angular/material/radio';
 import {ChromeBridgeService} from '../chrome-bridge.service';
 import {PreferencesService} from '../preferences.service';
 
@@ -33,6 +34,8 @@ export class TabPreferencesComponent implements OnInit {
   preferences: PreferencesService;
   preferencesDebugClient = false;
   preferencesDebugExtension = false;
+  preferencesUnsupportedApi = 'off';
+
   isRemoteTarget = false;
   chromeBridge: ChromeBridgeService;
 
@@ -49,6 +52,8 @@ export class TabPreferencesComponent implements OnInit {
     this.preferencesDebugClient = await this.preferences.getFlagDebugClient();
     this.preferencesDebugExtension =
       await this.preferences.getFlagDebugExtension();
+    this.preferencesUnsupportedApi =
+      (await this.preferences.getUnsupportedApiBehavior()) || 'off';
   }
 
   /**
@@ -83,5 +88,17 @@ export class TabPreferencesComponent implements OnInit {
     const {checked} = event;
     this.preferencesDebugExtension = checked;
     await this.preferences.setFlagDebugExtension(checked);
+  }
+
+  /**
+   * Click handler when the Unsupported API level radio button is changed.
+   * @param event Toggle event
+   */
+  async onChangeUnsupportedApi(event: MatRadioChange) {
+    const {value} = event;
+    this.preferencesUnsupportedApi = value;
+    await this.preferences.setUnsupportedApiBehavior(value);
+    // Sync this changed value with webpage
+    await this.chromeBridge.updateUnsupportedApiBehavior(value);
   }
 }

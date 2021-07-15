@@ -29,6 +29,12 @@ interface ExtensionPreferences {
    * Flag that, when enabled, sends logs in webpage context.
    */
   flagDebugClient: boolean;
+  /**
+   * How to handle when the webpage calls an API method that will not work in
+   * Interactive Canvas.
+   * @see https://developers.google.com/assistant/interactivecanvas/web-apps#guidelines_and_restrictions
+   */
+  unsupportedApiBehavior: 'off' | 'warn' | 'error';
 }
 
 type ExtensionPreference = keyof ExtensionPreferences;
@@ -59,6 +65,14 @@ export class PreferencesService {
 
   async setFlagDebugClient(value: boolean) {
     return this.writePreference<boolean>('flagDebugClient', value);
+  }
+
+  async getUnsupportedApiBehavior() {
+    return this.readPreference<string>('unsupportedApiBehavior');
+  }
+
+  async setUnsupportedApiBehavior(value: string) {
+    this.writePreference<string>('unsupportedApiBehavior', value);
   }
 
   private async readPreference<T>(key: ExtensionPreference): Promise<T> {
