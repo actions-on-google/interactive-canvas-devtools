@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "lib": ["es2017", "dom"],
+    "module": "None",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "outDir": "./dist/tests",
+    "sourceMap": true,
+    "target": "es2017",
+    "types": ["node"]
+  },
+  "compileOnSave": true,
+  "allowJs": true,
+  "include": [
+    "src/**/*.test.ts"
+  ]
+}

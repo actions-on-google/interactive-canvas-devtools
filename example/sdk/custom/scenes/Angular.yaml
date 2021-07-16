@@ -1,0 +1,56 @@
+#  Copyright 2021 Google LLC
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+intentEvents:
+- handler:
+    staticPrompt:
+      candidates:
+      - promptResponse:
+          canvas:
+            data:
+            - placeholder: $intent.params.ordinal.resolved
+            sendStateDataToCanvasApp: true
+            url: https://<PROJECT-ID>.web.app/
+      - promptResponse:
+          firstSimple:
+            variants:
+            - speech: Choosing option $intent.params.ordinal.resolved.
+  intent: navigate_down
+- handler:
+    staticPrompt:
+      candidates:
+      - promptResponse:
+          canvas:
+            data:
+            - placeholder: Scenes Static
+            sendStateDataToCanvasApp: true
+            url: https://<PROJECT-ID>.web.app/
+      - promptResponse:
+          firstSimple:
+            variants:
+            - speech: <speech>Navigationg <mark name="sceneyaml"/>back</speech>
+  intent: navigate_up
+onEnter:
+  staticPrompt:
+    candidates:
+    - selector:
+        surfaceCapabilities:
+          capabilities:
+          - INTERACTIVE_CANVAS
+    - promptResponse:
+        canvas:
+          url: https://<PROJECT-ID>.web.app/
+        firstSimple:
+          variants:
+          - speech: <speech>Navigationg <mark name="back2"/>back <mark name="back3"/></speech>
+          - speech: Welcome. Which course do you want to select?

@@ -20,7 +20,7 @@
  * This runs in a sandbox, with restricted access to novel Window objects.
  */
 
-import {InteractiveCanvasWindow} from './types';
+import {InteractiveCanvasWindow} from '../types';
 
 declare let window: InteractiveCanvasWindow;
 

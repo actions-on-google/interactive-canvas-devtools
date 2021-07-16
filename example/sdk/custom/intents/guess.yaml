@@ -1,0 +1,37 @@
+#  Copyright 2020 Google LLC
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+parameters:
+- name: letter
+  type:
+    name: letter
+- name: word
+  type:
+    name: word
+trainingPhrases:
+- ($letter 'A' auto=true)
+- letter ($letter 'Y' auto=true)
+- the letter ($letter 'C' auto=true)
+- ($letter 'i' auto=true) guess ($letter 'Z' auto=true)
+- the word is ($word 'home' auto=false)
+- try ($word 'Colombia' auto=false)
+- what about ($word 'water' auto=false)
+- it's the word ($word 'tiger' auto=false)
+- it is the word ($word 'blue' auto=false)
+- I guess its ($word 'red' auto=false)
+- I guess it is ($word 'apartment' auto=false)
+- I guess it's ($word 'house' auto=false)
+- its ($letter 'B' auto=true)
+- it is ($letter 'A' auto=true)
+- it's ($word 'Google' auto=false)
+- ($word 'Word' auto=false)

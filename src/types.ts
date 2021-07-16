@@ -58,6 +58,7 @@ export interface FileHandler {
  * @see https://wicg.github.io/file-system-access/#api-filesystemfilehandle-getfile
  */
 export interface File {
+  currentPath: string;
   slice: () => Promise<Blob>;
   text: () => Promise<string>;
 }
@@ -84,9 +85,9 @@ export interface InteractiveCanvasWindow extends Window {
     title: string;
     projectId: string;
     /**
-     * base64 representation of the project's logo.
+     * Project's logo as FileHandler.
      */
-    logoSrcData: string;
+    logoFile: File;
   };
   interactiveCanvasDebug: InteractiveCanvasCallbacks;
   /**

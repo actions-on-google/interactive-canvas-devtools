@@ -56,6 +56,7 @@ export class TabUpdateComponent implements OnInit {
    */
   run() {
     const json = jsonRepair(this.updateInput || '{}');
+    console.log('AA', json);
     this.chromeBridge.sendOnUpdate(json);
   }
 }

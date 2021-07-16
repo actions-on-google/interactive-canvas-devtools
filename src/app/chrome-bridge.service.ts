@@ -203,7 +203,7 @@ export class ChromeBridgeService {
     if (this.isRemoteTarget) {
       // Send unparsed text
       await this.execOnRemoteTab(
-        `window.interactiveCanvas.a.m.onUpdate([${object}])`
+        `window.interactiveCanvas.g.G.onUpdate([${object}])`
       );
     } else {
       await this.broadcastMessage('payload', [JSON.parse(object)]);
@@ -224,7 +224,7 @@ export class ChromeBridgeService {
     if (this.isRemoteTarget) {
       // Send unparsed text
       await this.execOnRemoteTab(
-        `window.interactiveCanvas.a.m.onTtsMark([${mark}])`
+        `window.interactiveCanvas.g.G.onTtsMark([${mark}])`
       );
     } else {
       await this.broadcastMessage('TtsEndpointEvent', mark);

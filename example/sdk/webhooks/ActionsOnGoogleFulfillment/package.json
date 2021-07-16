@@ -1,0 +1,16 @@
+{
+  "name": "actions-builder-snow-pal",
+  "version": "0.0.0",
+  "private": true,
+  "description": "An Action that demonstrates an Interactive Canvas game.",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "engines": {
+    "node": "10"
+  },
+  "dependencies": {
+    "@assistant/conversation": "^3.0.0",
+    "firebase-admin": "~8.12.1",
+    "firebase-functions": "^3.6.2"
+  }
+}

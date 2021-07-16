@@ -19,7 +19,9 @@
       "rules": {
         "@typescript-eslint/triple-slash-reference": "off",
         "@typescript-eslint/no-explicit-any": "error",
-        "no-constant-condition": "off"
+        "no-constant-condition": "off",
+        "node/no-unpublished-import": "off",
+        "node/no-unpublished-require": "off"
       }
     },
     {

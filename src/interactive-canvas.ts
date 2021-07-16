@@ -23,7 +23,7 @@ export interface InteractiveCanvas {
   sendTextQuery: (textQuery: string) => Promise<State>;
   getHeaderHeightPx: () => Promise<number>;
   setCanvasState: (state: Object) => Promise<void>;
-  a: {
+  g: {
     G: InteractiveCanvasCallbacks;
   };
 }

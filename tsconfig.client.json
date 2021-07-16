@@ -26,8 +26,6 @@
     ]
   },
   "include": [
-    "src/bootstrap.ts",
-    "src/content-script.ts",
-    "src/webpage-script.ts"
+    "src/webpage/*.ts",
   ]
 }

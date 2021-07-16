@@ -13,9 +13,9 @@
 export default function (jsonlike: string) {
   const repaired = jsonlike
     // key: "value" => "key": "value"
-    .replace(/(\w+):/g, '"$1":')
+    .replace(/([\w.]+):/g, '"$1":')
     // "key": 'value' => "key": "value"
-    .replace(/'(\w+)'/g, '"$1"')
+    .replace(/'([\w.]+)'/g, '"$1"')
     .replace(/\n/g, '')
     .replace(/\s\s/g, '')
     .replace(/, }/g, '}')
