@@ -1,7 +1,7 @@
 {
-    "name": "Interactive Canvas Extension",
-    "description": "Interactive Canvas Extension!",
-    "version": "0.0.0",
+    "name": "Interactive Canvas DevTools",
+    "description": "DevTools for Interactive Canvas",
+    "version": "1.0.0",
     "manifest_version": 3,
     "permissions": ["storage", "activeTab", "scripting"],
     "host_permissions": ["<all_urls>"],

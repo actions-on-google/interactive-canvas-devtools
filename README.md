@@ -4,7 +4,8 @@ Interactive Canvas DevTools is a Chrome DevTools extension for debugging an [Int
 
 ## Usage
 
-You can install the extension from the Chrome Web Store.
+You can install the extension from the
+[Chrome Web Store](https://chrome.google.com/webstore/detail/interactive-canvas-devtoo/pkjknimohoicpbkkgdhbdhcgnbcdefhk).
 
 Once installed, you can open your Interactive Canvas project in your web browser, either from a hosted URL or localhost. In Chrome DevTools, find the **Interactive Canvas** tab and select it.
 
