@@ -229,6 +229,25 @@ window.requestAnimationFrame(() => {
   addDebuggingMethodsInJsConsole();
 });
 
+/**
+ * Dynamically gets the correct object within the Interactive Canvas
+ * object that contains callback methods.
+ * @returns InteractiveCanvasCallbacks object
+ */
+function getInteractiveCanvasCallbacks() {
+  // Internally, the callbacks are stored in interactiveCanvas.g.[letter]
+  // This letter is not static, and may change with each release.
+  // We need to iterate through each letter to find callbacks.
+  const callbackObjectKeys = Object.keys(window.interactiveCanvas.g);
+  for (const key of callbackObjectKeys) {
+    // Check that this element has an onUpdate function.
+    if (window.interactiveCanvas.g[key].onUpdate !== undefined) {
+      return window.interactiveCanvas.g[key];
+    }
+  }
+  throw new Error('Cannot find callbacks in window.interactiveCanvas.g');
+}
+
 document.addEventListener('message', (e: Event) => {
   const event = e as MessageEvent;
   const eventData = event.data;
@@ -236,12 +255,12 @@ document.addEventListener('message', (e: Event) => {
   switch (type) {
     case 'payload': {
       const {data} = eventData;
-      window.interactiveCanvas.g.G.onUpdate(data);
+      getInteractiveCanvasCallbacks().onUpdate(data);
       break;
     }
     case 'TtsEndpointEvent': {
       const {name} = eventData;
-      window.interactiveCanvas.g.G.onTtsMark(name);
+      getInteractiveCanvasCallbacks().onTtsMark(name);
       break;
     }
     case 'Ext-ShowHeader': {

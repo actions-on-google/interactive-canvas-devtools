@@ -38,7 +38,7 @@
               },
               {
                 "input": "./dist/client-bundle",
-                "glob": "*.js",
+                "glob": "**/*.js",
                 "output": "."
               }
             ],

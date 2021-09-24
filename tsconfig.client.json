@@ -15,7 +15,7 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "ES2020",
-    "module": "CommonJS",
+    "module": "ES2015",
     "esModuleInterop": false,
     "lib": [
       "es2018",

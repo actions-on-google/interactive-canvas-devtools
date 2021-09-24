@@ -27,7 +27,7 @@ declare let window: InteractiveCanvasWindow;
 /**
  * An array of scripts to be loaded into the primary page context.
  */
-const scriptsToLoad = ['js-yaml.min.js', 'webpage-script.js'];
+const scriptsToLoad = ['js-yaml.min.js', 'webpage/webpage-script.js'];
 scriptsToLoad.forEach(script => {
   const s = document.createElement('script');
   s.src = chrome.runtime.getURL(script);

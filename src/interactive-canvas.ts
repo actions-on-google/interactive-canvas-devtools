@@ -24,7 +24,7 @@ export interface InteractiveCanvas {
   getHeaderHeightPx: () => Promise<number>;
   setCanvasState: (state: Object) => Promise<void>;
   g: {
-    G: InteractiveCanvasCallbacks;
+    [key: string]: InteractiveCanvasCallbacks;
   };
 }
 

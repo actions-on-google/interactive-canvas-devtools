@@ -3,18 +3,22 @@
   "author": {
     "name": "Google LLC"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=12.22.2"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "npm run build:client && npm run build:extension",
-    "build:client": "tsc --project tsconfig.client.json && parcel build dist/client/*.js --dist-dir dist/client-bundle",
+    "build:client": "tsc --project tsconfig.client.json && parcel build dist/client/**/*.js --dist-dir dist/client-bundle",
     "build:extension": "ng build",
+    "clean": "rm -rf ./.parcel-cache ./dist",
     "fix": "ng lint --fix",
     "lint": "ng lint",
-    "package": "cd dist/interactive-canvas-extension && zip bundle.zip * && mv bundle.zip ../../",
+    "package": "cd dist/interactive-canvas-extension && zip bundle.zip * **/* && mv bundle.zip ../../",
     "test": "npm run lint && npm run test:unit",
     "test:unit": "tsc --project tsconfig.ava.json && ava dist/tests/**/*.test.js",
     "watch": "ng build --watch --configuration development"

@@ -1,7 +1,7 @@
 {
     "name": "Interactive Canvas DevTools",
     "description": "DevTools for Interactive Canvas",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "manifest_version": 3,
     "permissions": ["storage", "activeTab", "scripting"],
     "host_permissions": ["<all_urls>"],
@@ -10,12 +10,12 @@
             "matches": ["<all_urls>"],
             "exclude_matches": ["*://*.google.com/*"],
             "run_at": "document_end",
-            "js": ["content-script.js"],
+            "js": ["webpage/content-script.js"],
             "all_frames": true
         }
     ],
     "web_accessible_resources": [{
-        "resources": ["js-yaml.min.js", "webpage-script.js"],
+        "resources": ["js-yaml.min.js", "webpage/webpage-script.js"],
         "matches": ["<all_urls>"]
     }],
     "devtools_page": "bootstrap.html"
